@@ -11,7 +11,7 @@ console.log("🔍 Running pre-deployment tests...")
 
 // Test 1: Check for required environment variables
 console.log("\n📋 Checking environment variables...")
-const requiredEnvVars = ["RESEND_API_KEY"]
+const requiredEnvVars = ["RESEND_API_KEY", "CONTACT_EMAIL"]
 const missingEnvVars = requiredEnvVars.filter((envVar) => !process.env[envVar])
 
 if (missingEnvVars.length > 0) {
