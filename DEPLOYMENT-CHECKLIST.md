@@ -2,7 +2,7 @@
 
 ## Pre-Deployment Checks
 
-- [ ] Run pre-deployment test script: `node scripts/pre-deployment-test.js`
+ - [ ] Run pre-deployment test script: `node scripts/pre-deployment-test.mjs`
 - [ ] Ensure all environment variables are set in deployment platform:
   - [ ] `RESEND_API_KEY` for contact form functionality
   - [ ] `ANALYZE` (optional) for bundle analysis
