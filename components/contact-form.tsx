@@ -2,9 +2,10 @@
 
 import type React from "react"
 
-import { useState } from "react"
+import { useState, useRef, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { Loader2, Calendar } from "lucide-react"
+import ScriptLoader from "./script-loader"
 
 export default function ContactForm() {
   const router = useRouter()
@@ -20,6 +21,20 @@ export default function ContactForm() {
   const [formError, setFormError] = useState<string | null>(null)
   const [formSuccess, setFormSuccess] = useState(false)
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
+  const [recaptchaReady, setRecaptchaReady] = useState(false)
+  const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null)
+  const recaptchaRef = useRef<HTMLDivElement | null>(null)
+  const siteKey = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY || ""
+
+  useEffect(() => {
+    const grecaptcha = (window as any).grecaptcha
+    if (recaptchaReady && grecaptcha && recaptchaRef.current) {
+      grecaptcha.render(recaptchaRef.current, {
+        sitekey: siteKey,
+        callback: (token: string) => setRecaptchaToken(token),
+      })
+    }
+  }, [recaptchaReady, siteKey])
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target
@@ -54,6 +69,10 @@ export default function ContactForm() {
 
     // Validate form
     if (!validateForm()) return
+    if (!recaptchaToken) {
+      setFormError("Please complete the reCAPTCHA")
+      return
+    }
 
     setIsSubmitting(true)
 
@@ -63,7 +82,7 @@ export default function ContactForm() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({ ...formData, token: recaptchaToken }),
       })
 
       const data = await response.json()
@@ -82,6 +101,11 @@ export default function ContactForm() {
         message: "",
         interestArea: "sell-side-ma",
       })
+      const grecaptcha = (window as any).grecaptcha
+      if (grecaptcha) {
+        grecaptcha.reset()
+      }
+      setRecaptchaToken(null)
 
       // Redirect to thank you page after a delay
       setTimeout(() => {
@@ -91,6 +115,11 @@ export default function ContactForm() {
       setFormError(error instanceof Error ? error.message : "An unexpected error occurred")
     } finally {
       setIsSubmitting(false)
+      const grecaptcha = (window as any).grecaptcha
+      if (grecaptcha) {
+        grecaptcha.reset()
+      }
+      setRecaptchaToken(null)
     }
   }
 
@@ -248,17 +277,23 @@ export default function ContactForm() {
                 fieldErrors.message ? "border-red-500" : "border-gray-300 dark:border-gray-600"
               } rounded-md focus:ring-primary focus:border-primary bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100`}
             ></textarea>
-            {fieldErrors.message && (
-              <p id="message-error" className="mt-1 text-sm text-red-500">
-                {fieldErrors.message}
-              </p>
-            )}
-          </div>
+          {fieldErrors.message && (
+            <p id="message-error" className="mt-1 text-sm text-red-500">
+              {fieldErrors.message}
+            </p>
+          )}
+        </div>
 
-          {formError && (
-            <div className="bg-red-50 dark:bg-red-900/30 text-red-800 dark:text-red-200 p-3 rounded-md text-sm">
-              {formError}
-            </div>
+        <div ref={recaptchaRef} className="my-4" />
+        <ScriptLoader
+          src="https://www.google.com/recaptcha/api.js?render=explicit"
+          onLoad={() => setRecaptchaReady(true)}
+        />
+
+        {formError && (
+          <div className="bg-red-50 dark:bg-red-900/30 text-red-800 dark:text-red-200 p-3 rounded-md text-sm">
+            {formError}
+          </div>
           )}
 
           <div>

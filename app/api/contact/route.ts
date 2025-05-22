@@ -7,6 +7,7 @@ import { getEnv } from "@/lib/env"
 // Initialize Resend with API key from environment utility
 const resendApiKey = getEnv("RESEND_API_KEY")
 const resend = new Resend(resendApiKey)
+const recaptchaSecret = getEnv("RECAPTCHA_SECRET_KEY")
 
 export async function POST(request: Request) {
   try {
@@ -23,7 +24,35 @@ export async function POST(request: Request) {
     }
 
     const body = await request.json()
-    const { email, subject, message } = body
+    const { email, subject, message, token } = body
+
+    if (!recaptchaSecret) {
+      console.error("RECAPTCHA_SECRET_KEY is not set")
+      return NextResponse.json(
+        { success: false, message: "Server configuration error" },
+        { status: 500 },
+      )
+    }
+
+    const verifyResponse = await fetch(
+      "https://www.google.com/recaptcha/api/siteverify",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        body: `secret=${encodeURIComponent(recaptchaSecret)}&response=${encodeURIComponent(token)}`,
+      },
+    )
+
+    const verifyData = await verifyResponse.json()
+
+    if (!verifyData.success) {
+      return NextResponse.json(
+        { success: false, message: "reCAPTCHA verification failed" },
+        { status: 400 },
+      )
+    }
 
     const data = await resend.emails.send({
       from: "Acme <onboarding@resend.dev>",

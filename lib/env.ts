@@ -15,6 +15,11 @@ const envConfig: Record<string, EnvVariable> = {
     isRequired: true,
     isSecret: true,
   },
+  RECAPTCHA_SECRET_KEY: {
+    key: "RECAPTCHA_SECRET_KEY",
+    isRequired: true,
+    isSecret: true,
+  },
   ANALYZE: {
     key: "ANALYZE",
     defaultValue: "false",
