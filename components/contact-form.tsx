@@ -15,6 +15,7 @@ export default function ContactForm() {
     phone: "",
     message: "",
     interestArea: "sell-side-ma",
+    bestTimeToCall: "",
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [formError, setFormError] = useState<string | null>(null)
@@ -81,6 +82,7 @@ export default function ContactForm() {
         phone: "",
         message: "",
         interestArea: "sell-side-ma",
+        bestTimeToCall: "",
       })
 
       // Redirect to thank you page after a delay
@@ -224,8 +226,14 @@ export default function ContactForm() {
             <select
               id="bestTimeToCall"
               name="bestTimeToCall"
+              value={formData.bestTimeToCall}
+              onChange={handleChange}
+              required
               className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-primary focus:border-primary bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
             >
+              <option value="" disabled>
+                Select best time
+              </option>
               <option value="morning">Morning (9am-12pm)</option>
               <option value="afternoon">Afternoon (12pm-5pm)</option>
               <option value="evening">Evening (After 5pm)</option>
