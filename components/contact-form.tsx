@@ -15,6 +15,7 @@ export default function ContactForm() {
     phone: "",
     message: "",
     interestArea: "sell-side-ma",
+    bestTimeToCall: "morning",
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [formError, setFormError] = useState<string | null>(null)
@@ -81,6 +82,7 @@ export default function ContactForm() {
         phone: "",
         message: "",
         interestArea: "sell-side-ma",
+        bestTimeToCall: "morning",
       })
 
       // Redirect to thank you page after a delay

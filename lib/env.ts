@@ -15,6 +15,10 @@ const envConfig: Record<string, EnvVariable> = {
     isRequired: true,
     isSecret: true,
   },
+  CONTACT_EMAIL: {
+    key: "CONTACT_EMAIL",
+    isRequired: true,
+  },
   ANALYZE: {
     key: "ANALYZE",
     defaultValue: "false",
