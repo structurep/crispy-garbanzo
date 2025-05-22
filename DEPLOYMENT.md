@@ -59,6 +59,14 @@ If you encounter issues during deployment:
 2. Verify that all environment variables are set correctly
 3. Try deploying from a clean branch
 4. Contact Vercel support if issues persist
-\`\`\`
 
 ### 3.2 Create a Skip Link for Accessibility
+
+Adding a skip link helps keyboard and screen reader users bypass repetitive navigation links. Follow these steps:
+
+1. In your layout file (for example, `app/layout.tsx`), place an anchor element at the very start of the `<body>` that links to the main content area:
+   `<a href="#main-content" class="sr-only focus:not-sr-only">Skip to main content</a>`
+2. Add `id="main-content"` to the container that wraps your page's primary content, typically the `<main>` element.
+3. Style the link so it is visually hidden until focused. The combination of Tailwind's `sr-only` class and `focus:not-sr-only` variant is a common approach.
+
+This small enhancement improves keyboard navigation and overall accessibility.
