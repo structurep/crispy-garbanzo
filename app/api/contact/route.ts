@@ -6,6 +6,7 @@ import { getEnv } from "@/lib/env"
 
 // Initialize Resend with API key from environment utility
 const resendApiKey = getEnv("RESEND_API_KEY")
+const contactEmail = getEnv("CONTACT_EMAIL")
 const resend = new Resend(resendApiKey)
 
 export async function POST(request: Request) {
@@ -23,17 +24,38 @@ export async function POST(request: Request) {
     }
 
     const body = await request.json()
-    const { email, subject, message } = body
+    const {
+      name,
+      email,
+      company,
+      phone,
+      message,
+      interestArea,
+      bestTimeToCall,
+    } = body
+
+    if (!contactEmail) {
+      console.error("CONTACT_EMAIL is not set")
+      return NextResponse.json(
+        { success: false, message: "Contact email not configured" },
+        { status: 500 },
+      )
+    }
 
     const data = await resend.emails.send({
-      from: "Acme <onboarding@resend.dev>",
-      to: [email],
-      subject: subject || "Contact Form Submission",
+      from: "Website Contact <onboarding@resend.dev>",
+      to: [contactEmail],
+      reply_to: email,
+      subject: subject || "New Contact Form Submission",
       html: `
-        <div>
-          <p>Thank you for contacting us!</p>
-          <p>Here is your message: ${message}</p>
-        </div>
+        <h2>New Contact Form Submission</h2>
+        <p><strong>Name:</strong> ${name}</p>
+        <p><strong>Email:</strong> ${email}</p>
+        <p><strong>Company:</strong> ${company}</p>
+        <p><strong>Phone:</strong> ${phone}</p>
+        <p><strong>Interest Area:</strong> ${interestArea}</p>
+        <p><strong>Best Time To Call:</strong> ${bestTimeToCall || ""}</p>
+        <p><strong>Message:</strong><br/>${message}</p>
       `,
     })
 
