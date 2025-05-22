@@ -54,32 +54,62 @@ if (fs.existsSync(apiFile)) {
   console.error("❌ API route file not found")
 }
 
-// Check for image alt text
-console.log("\n🖼️ Checking for image alt text...")
-const imageFiles = [
-  "components/testimonial-section.tsx",
-  "components/founder-bio.tsx",
-  "components/differentiation-section.tsx",
-]
+// Check that all images in components/ have descriptive alt text
+console.log("\n🖼️ Checking for image alt text in components...")
 
-let altTextIssues = 0
+function getComponentFiles(dir) {
+  const entries = fs.readdirSync(dir, { withFileTypes: true })
+  const files = []
+  for (const entry of entries) {
+    const fullPath = path.join(dir, entry.name)
+    if (entry.isDirectory()) {
+      files.push(...getComponentFiles(fullPath))
+    } else if (entry.isFile() && fullPath.match(/\.tsx?$/)) {
+      files.push(fullPath)
+    }
+  }
+  return files
+}
 
-imageFiles.forEach((file) => {
-  const filePath = path.join(process.cwd(), file)
-  if (fs.existsSync(filePath)) {
-    const content = fs.readFileSync(filePath, "utf8")
+const componentDir = path.join(process.cwd(), "components")
+const componentFiles = getComponentFiles(componentDir)
 
-    if (content.includes("alt={") && !content.includes('alt=""')) {
-      console.log(`✅ ${file} has proper alt text`)
-    } else {
-      console.warn(`⚠️ ${file} may not have proper alt text`)
-      altTextIssues++
+let altTextIssues = []
+
+componentFiles.forEach((file) => {
+  const content = fs.readFileSync(file, "utf8")
+  const lines = content.split(/\r?\n/)
+
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i]
+    if (line.includes("<Image") || line.includes("<img")) {
+      let tag = line
+      let j = i
+      while (!tag.includes(">") && j + 1 < lines.length) {
+        j++
+        tag += lines[j]
+      }
+
+      const hasAltAttribute = /\balt\s*=\s*("[^"]+"|'[^']+'|\{[^}]+\})/i.test(tag)
+      const hasImageProps = /\{\s*\.\.\.\s*imageProps\s*\}/.test(tag)
+      const hasAlt = hasAltAttribute || hasImageProps
+      const emptyAlt = /\balt\s*=\s*(""|'')/i.test(tag)
+
+      if (!hasAlt || emptyAlt) {
+        altTextIssues.push(`${path.relative(process.cwd(), file)}:${i + 1}`)
+      }
+
+      i = j
     }
   }
 })
 
-if (altTextIssues === 0) {
-  console.log("✅ All checked image components have proper alt text")
+if (altTextIssues.length === 0) {
+  console.log("✅ All component images have descriptive alt text")
+} else {
+  console.error("❌ Images missing descriptive alt text:")
+  altTextIssues.forEach((issue) => console.error(`  - ${issue}`))
+  process.exitCode = 1
 }
 
 // Check for dark mode contrast fixes
