@@ -161,7 +161,7 @@ export default function Footer() {
                 </div>
                 <p className="text-xs text-gray-500">
                   By subscribing, you agree to our{" "}
-                  <Link href="/privacy" className="underline hover:text-primary">
+                  <Link href="/privacy-policy" className="underline hover:text-primary">
                     Privacy Policy
                   </Link>
                 </p>
@@ -222,7 +222,7 @@ export default function Footer() {
         <div className="border-t border-gray-200 mt-8 pt-8 flex flex-col md:flex-row justify-between items-center">
           <p className="text-gray-500 text-sm">&copy; {currentYear} Structured Partners. All rights reserved.</p>
           <div className="mt-4 md:mt-0 flex flex-wrap gap-4">
-            <Link href="/privacy" className="text-gray-500 text-sm hover:text-primary">
+            <Link href="/privacy-policy" className="text-gray-500 text-sm hover:text-primary">
               Privacy Policy
             </Link>
             <Link href="/terms" className="text-gray-500 text-sm hover:text-primary">
