@@ -59,6 +59,9 @@ If you encounter issues during deployment:
 2. Verify that all environment variables are set correctly
 3. Try deploying from a clean branch
 4. Contact Vercel support if issues persist
-\`\`\`
 
 ### 3.2 Create a Skip Link for Accessibility
+Add a skip link near the top of the page so keyboard and screen reader users can bypass
+the navigation. Include a link that jumps to `#main-content` and becomes visible when
+focused. This project provides a `SkipLink` component that you can add in
+`app/layout.tsx` before the main content wrapper.

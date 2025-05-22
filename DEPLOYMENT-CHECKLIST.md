@@ -67,6 +67,14 @@
 ### Performance Issues
 - **Issue**: Slow page load times
 - **Solution**: Optimize images, implement proper code splitting, and use Next.js performance features
-\`\`\`
 
-Let's also update the environment variables utility to ensure it's properly handling the required variables:
+## Environment Utility
+Ensure `lib/env.ts` validates required variables and provides helpful errors. Example:
+
+```ts
+export function getEnv(name: string): string {
+  const value = process.env[name]
+  if (!value) throw new Error(`Missing environment variable ${name}`)
+  return value
+}
+```
