@@ -15,8 +15,13 @@ const nextConfig = {
     ignoreBuildErrors: true,
   },
   images: {
-    domains: ['images.unsplash.com', 'res.cloudinary.com'],
-    unoptimized: true,
+    domains: [
+      'images.unsplash.com',
+      'res.cloudinary.com',
+      'imagedelivery.net',
+      'imagecdn.app',
+    ],
+    unoptimized: false,
   },
   // Remove the experimental optimizeCss feature that's causing the build error
   // experimental: {
