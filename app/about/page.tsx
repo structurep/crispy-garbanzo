@@ -14,6 +14,19 @@ export const metadata: Metadata = {
     "deal sherpa",
     "exit strategy experts",
   ],
+  openGraph: {
+    title: "About Us | Structured Partners",
+    description:
+      "Founded on the principle that M&A advisors should truly understand the businesses they represent. Learn about our team and our approach.",
+    images: [
+      {
+        url: "/images/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "Structured Partners - About Us",
+      },
+    ],
+  },
 }
 
 export default function AboutPage() {

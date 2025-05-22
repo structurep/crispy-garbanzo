@@ -7,6 +7,19 @@ export const metadata: Metadata = {
   title: "Affiliations & Partnerships | Structured Partners",
   description:
     "Explore our industry affiliations and partnerships that help us deliver exceptional value to our clients in the building products and services industry.",
+  openGraph: {
+    title: "Affiliations & Partnerships | Structured Partners",
+    description:
+      "Explore our industry affiliations and partnerships that help us deliver exceptional value to our clients in the building products and services industry.",
+    images: [
+      {
+        url: "/images/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "Structured Partners - Affiliations",
+      },
+    ],
+  },
 }
 
 export default function AffiliationsPage() {
