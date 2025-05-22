@@ -23,12 +23,11 @@ export async function POST(request: Request) {
     }
 
     const body = await request.json()
-    const { email, subject, message } = body
+    const { email, message } = body
 
     const data = await resend.emails.send({
       from: "Acme <onboarding@resend.dev>",
       to: [email],
-      subject: subject || "Contact Form Submission",
       html: `
         <div>
           <p>Thank you for contacting us!</p>
