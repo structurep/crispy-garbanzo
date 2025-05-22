@@ -122,19 +122,16 @@ class Analytics {
     this.events = []
 
     try {
-      // In a real implementation, this would send to your analytics endpoint
-      console.log("Sending analytics events:", eventsToSend)
-
-      // Simulate sending to backend
-      // await fetch('/api/analytics', {
-      //   method: 'POST',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify({
-      //     userId: this.userId,
-      //     sessionId: this.sessionId,
-      //     events: eventsToSend
-      //   })
-      // })
+      // Send events to backend endpoint
+      await fetch("/api/analytics", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          userId: this.userId,
+          sessionId: this.sessionId,
+          events: eventsToSend,
+        }),
+      })
     } catch (error) {
       // If sending fails, add events back to queue
       console.error("Failed to send analytics events:", error)

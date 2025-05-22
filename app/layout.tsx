@@ -5,6 +5,8 @@ import "./globals.css"
 import SkipLink from "@/components/skip-link"
 // Import the Providers component
 import { Providers } from "./providers"
+// Import the AnalyticsProvider component
+import AnalyticsProvider from "@/components/analytics-provider"
 
 export const metadata: Metadata = {
   title: "v0 App",
@@ -21,11 +23,13 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <SkipLink />
-        <Providers>
-          <div id="main-content" tabIndex={-1}>
-            {children}
-          </div>
-        </Providers>
+        <AnalyticsProvider>
+          <Providers>
+            <div id="main-content" tabIndex={-1}>
+              {children}
+            </div>
+          </Providers>
+        </AnalyticsProvider>
       </body>
     </html>
   )
