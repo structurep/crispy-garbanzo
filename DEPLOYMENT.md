@@ -59,6 +59,22 @@ If you encounter issues during deployment:
 2. Verify that all environment variables are set correctly
 3. Try deploying from a clean branch
 4. Contact Vercel support if issues persist
-\`\`\`
 
 ### 3.2 Create a Skip Link for Accessibility
+
+To improve keyboard navigation, include a skip link that allows users to jump
+straight to the main content. Use the `SkipLink` component from
+`components/skip-link.tsx` and place it as the first element inside the
+`<body>` tag in `app/layout.tsx`:
+
+```tsx
+<SkipLink />
+<Providers>
+  <div id="main-content" tabIndex={-1}>
+    {children}
+  </div>
+</Providers>
+```
+
+When focused, the link becomes visible and lets assistive technology bypass the
+navigation. This small addition greatly enhances the site's overall accessibility.
