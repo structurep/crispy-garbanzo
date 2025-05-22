@@ -9,7 +9,10 @@ The following environment variables must be set in your Vercel project settings:
 | Variable | Description | Required |
 |----------|-------------|----------|
 | RESEND_API_KEY | API key for Resend email service | Yes |
+| CONTACT_EMAIL | Destination address for contact form submissions | Yes |
 | ANALYZE | Enable bundle analysis during build (set to "true") | No |
+
+Submissions from the contact form will be sent to the address specified in `CONTACT_EMAIL`.
 
 ## Deployment Steps
 
@@ -59,6 +62,3 @@ If you encounter issues during deployment:
 2. Verify that all environment variables are set correctly
 3. Try deploying from a clean branch
 4. Contact Vercel support if issues persist
-\`\`\`
-
-### 3.2 Create a Skip Link for Accessibility
