@@ -5,6 +5,7 @@
 - [ ] Run pre-deployment test script: `node scripts/pre-deployment-test.js`
 - [ ] Ensure all environment variables are set in deployment platform:
   - [ ] `RESEND_API_KEY` for contact form functionality
+  - [ ] `CONTACT_EMAIL` for receiving contact form submissions
   - [ ] `ANALYZE` (optional) for bundle analysis
 - [ ] Verify all images and assets are properly referenced and available
 - [ ] Test all interactive features in a staging environment
@@ -67,6 +68,3 @@
 ### Performance Issues
 - **Issue**: Slow page load times
 - **Solution**: Optimize images, implement proper code splitting, and use Next.js performance features
-\`\`\`
-
-Let's also update the environment variables utility to ensure it's properly handling the required variables:

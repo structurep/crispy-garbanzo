@@ -7,6 +7,7 @@ import { getEnv } from "@/lib/env"
 // Initialize Resend with API key from environment utility
 const resendApiKey = getEnv("RESEND_API_KEY")
 const resend = new Resend(resendApiKey)
+const contactEmail = getEnv("CONTACT_EMAIL")
 
 export async function POST(request: Request) {
   try {
@@ -21,13 +22,24 @@ export async function POST(request: Request) {
         { status: 500 },
       )
     }
+    // Check if contact email is set
+    if (!contactEmail) {
+      console.error("CONTACT_EMAIL is not set")
+      return NextResponse.json(
+        {
+          success: false,
+          message: "Contact email not configured. Please contact support.",
+        },
+        { status: 500 },
+      )
+    }
 
     const body = await request.json()
     const { email, subject, message } = body
 
     const data = await resend.emails.send({
       from: "Acme <onboarding@resend.dev>",
-      to: [email],
+      to: [contactEmail],
       subject: subject || "Contact Form Submission",
       html: `
         <div>
