@@ -32,14 +32,14 @@ export default function ClientPage() {
 
       <VideoHero />
       <ServicesSection />
+      <TestimonialSection />
+      <CTASection />
       <ProcessTimeline />
       <DifferentiationSection />
-      <TestimonialSection />
       <ClientArchetypes />
       <OriginStory />
       <AffiliationsSection />
       {isMobile ? <FounderBioMobile /> : <FounderBio />}
-      <CTASection />
       <StickyCTA />
       <ExitIntentPopup />
       <ChatBot />
