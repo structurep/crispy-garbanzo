@@ -2,7 +2,8 @@
 
 import type React from "react"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
+import { useFocusTrap } from "@/lib/useFocusTrap"
 import { MessageCircle, X, Send } from "lucide-react"
 
 export default function LiveChatWidget() {
@@ -12,6 +13,8 @@ export default function LiveChatWidget() {
     { type: "agent", text: "Hello! How can I help you with your exit strategy today?" },
   ])
   const [mounted, setMounted] = useState(false)
+  const dialogRef = useRef<HTMLDivElement>(null)
+  const headingId = "live-chat-title"
 
   useEffect(() => {
     setMounted(true)
@@ -52,6 +55,8 @@ export default function LiveChatWidget() {
     }, 1000)
   }
 
+  useFocusTrap(isOpen, dialogRef)
+
   if (!mounted) return null
 
   return (
@@ -69,10 +74,17 @@ export default function LiveChatWidget() {
 
       {/* Chat window */}
       {isOpen && (
-        <div className="fixed bottom-20 right-4 w-80 sm:w-96 bg-white rounded-lg shadow-xl z-40 overflow-hidden border border-gray-200 flex flex-col">
+        <div
+          className="fixed bottom-20 right-4 w-80 sm:w-96 bg-white rounded-lg shadow-xl z-40 overflow-hidden border border-gray-200 flex flex-col"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby={headingId}
+          ref={dialogRef}
+          tabIndex={-1}
+        >
           {/* Chat header */}
           <div className="bg-primary text-white p-4">
-            <h3 className="font-medium">Structured Partners</h3>
+            <h3 id={headingId} className="font-medium">Structured Partners</h3>
             <p className="text-sm text-primary-100">M&A Advisory Chat</p>
           </div>
 

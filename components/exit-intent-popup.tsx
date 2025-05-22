@@ -3,6 +3,7 @@
 import type React from "react"
 
 import { useState, useEffect, useRef } from "react"
+import { useFocusTrap } from "@/lib/useFocusTrap"
 import { X, Download, Mail } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
 
@@ -13,6 +14,8 @@ export default function ExitIntentPopup() {
   const [isSubmitted, setIsSubmitted] = useState(false)
   const [mounted, setMounted] = useState(false)
   const popupShownRef = useRef(false)
+  const dialogRef = useRef<HTMLDivElement>(null)
+  const headingId = isSubmitted ? "exit-popup-thankyou-title" : "exit-popup-title"
 
   useEffect(() => {
     setMounted(true)
@@ -87,6 +90,8 @@ export default function ExitIntentPopup() {
     localStorage.setItem("hasSeenExitPopup", "true")
   }
 
+  useFocusTrap(isVisible, dialogRef)
+
   // Don't render until client-side
   if (!mounted) {
     return null
@@ -101,13 +106,18 @@ export default function ExitIntentPopup() {
           exit={{ opacity: 0 }}
           className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4"
         >
-          <motion.div
-            initial={{ scale: 0.9, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            exit={{ scale: 0.9, opacity: 0 }}
-            transition={{ type: "spring", damping: 25, stiffness: 300 }}
-            className="bg-white dark:bg-gray-900 rounded-lg shadow-xl max-w-md w-full relative overflow-hidden"
-          >
+        <motion.div
+          initial={{ scale: 0.9, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          exit={{ scale: 0.9, opacity: 0 }}
+          transition={{ type: "spring", damping: 25, stiffness: 300 }}
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby={headingId}
+          ref={dialogRef}
+          tabIndex={-1}
+          className="bg-white dark:bg-gray-900 rounded-lg shadow-xl max-w-md w-full relative overflow-hidden"
+        >
             <button
               onClick={handleClose}
               className="absolute top-4 right-4 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition-colors"
@@ -122,7 +132,7 @@ export default function ExitIntentPopup() {
                   <div className="bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-100 rounded-full p-3 inline-flex mb-4">
                     <Download className="h-6 w-6" />
                   </div>
-                  <h3 className="text-xl font-bold mb-2">Thank You!</h3>
+                  <h3 id={headingId} className="text-xl font-bold mb-2">Thank You!</h3>
                   <p className="text-gray-600 dark:text-gray-300 mb-4">Your guide is on its way to your inbox.</p>
                   <a
                     href="/resources/founders-guide-to-selling.pdf"
@@ -135,7 +145,7 @@ export default function ExitIntentPopup() {
               ) : (
                 <>
                   <div className="bg-primary text-white py-4 px-6 -mx-6 -mt-6 mb-6">
-                    <h3 className="text-xl font-bold">The Founder's Guide to Selling Your Business</h3>
+                    <h3 id={headingId} className="text-xl font-bold">The Founder's Guide to Selling Your Business</h3>
                     <p className="text-primary-100 mt-1">Free 25-page playbook with actionable strategies</p>
                   </div>
 
